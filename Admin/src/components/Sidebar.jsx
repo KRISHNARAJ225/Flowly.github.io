@@ -2,10 +2,12 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { LayoutDashboard, TicketCheck, Users, Mail, UserCheck } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
+  const { isAdmin } = useAuth();
 
   useEffect(() => {
     if (collapsed) {
@@ -68,14 +70,15 @@ export default function Sidebar() {
             {!collapsed && <span>Mailbox</span>}
           </Link>
 
-        
-          <Link
-            to="/leads"
-            className={`nav-link d-flex align-items-center gap-3 py-3 px-3 rounded ${location.pathname === '/leads' ? 'active' : ''}`}
-          >
-            <UserCheck size={20} />
-            {!collapsed && <span>Leads</span>}
-          </Link>
+          {isAdmin && (
+            <Link
+              to="/leads"
+              className={`nav-link d-flex align-items-center gap-3 py-3 px-3 rounded ${location.pathname === '/leads' ? 'active' : ''}`}
+            >
+              <UserCheck size={20} />
+              {!collapsed && <span>Leads</span>}
+            </Link>
+          )}
         </nav>
       </aside>
 

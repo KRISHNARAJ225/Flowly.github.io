@@ -1,7 +1,17 @@
 // src/components/ProfileDropdown.jsx
-import { LogOut, Settings, User } from 'lucide-react';
+import { LogOut, Key, User } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 export default function ProfileDropdown() {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+
   return (
     <div className="dropdown">
       <button
@@ -17,25 +27,25 @@ export default function ProfileDropdown() {
           width="32"
           height="32"
         />
-        <span className="d-none d-md-inline">User</span>
+        <span className="d-none d-md-inline">{user?.name || 'User'}</span>
       </button>
 
       <ul className="dropdown-menu dropdown-menu-end">
         <li>
-          <a className="dropdown-item" href="#">
+          <Link className="dropdown-item" to="/profile">
             <User size={16} className="me-2" /> Profile
-          </a>
+          </Link>
         </li>
         <li>
-          <a className="dropdown-item" href="#">
-            <Settings size={16} className="me-2" /> Settings
-          </a>
+          <Link className="dropdown-item" to="/login" state={{ tab: 'changepw' }}>
+            <Key size={16} className="me-2" /> Change Password
+          </Link>
         </li>
         <li><hr className="dropdown-divider" /></li>
         <li>
-          <a className="dropdown-item text-danger" href="#">
+          <button className="dropdown-item text-danger border-0 bg-transparent w-100 text-start" onClick={handleLogout}>
             <LogOut size={16} className="me-2" /> Logout
-          </a>
+          </button>
         </li>
       </ul>
     </div>
